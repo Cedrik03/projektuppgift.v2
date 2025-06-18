@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ta bort användare</title>
+</head>
+<body>
+<h1>Ta bort användare</h1>
+
+<form th:action="@{/delete}" method="post">
+  <label>Användar-ID att ta bort:</label>
+  <input type="number" name="id" required />
+  <button type="submit">Ta bort</button>
+</form>
+
+<a th:href="@{/}">Tillbaka till startsidan</a>
+</body>
+</html>
