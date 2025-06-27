@@ -1,8 +1,6 @@
-
 package org.example.projektuppgiftitsaker;
 
 import org.example.projektuppgiftitsaker.dto.UserRegistrationDto;
-import org.example.projektuppgiftitsaker.exception.UserNotFoundException;
 import org.example.projektuppgiftitsaker.service.AppUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,6 +29,7 @@ public class AuthControllerTest {
     private AppUserService userService;
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void testShowRegisterForm() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
@@ -38,6 +38,7 @@ public class AuthControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void testRegisterUserSuccess() throws Exception {
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -61,9 +62,9 @@ public class AuthControllerTest {
     @WithMockUser(username = "testuser", roles = "USER")
     void testDeleteUser() throws Exception {
         doNothing().when(userService).deleteUserByUsername("testuser");
+
         mockMvc.perform(delete("/user/testuser"))
                 .andExpect(status().isNoContent());
-
 
         verify(userService, times(1)).deleteUserByUsername("testuser");
     }
